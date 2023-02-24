@@ -1,0 +1,5 @@
+recursive-include my_assistant/ *
+recursive-include requirements/ *
+include CHANGELOG.md
+include LICENSE
+include requirements.txt

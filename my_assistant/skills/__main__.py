@@ -1,15 +1,12 @@
-import mycroft.lock
 from mycroft.skills.api import SkillApi
 from mycroft.skills.core import FallbackSkill
 from mycroft.skills.event_scheduler import EventScheduler
 from mycroft.skills.intent_service import IntentService
-from mycroft.util import (
-    reset_sigint_handler,
-    start_message_bus_client,
-    wait_for_exit_signal, init_service_logger
-)
+from mycroft_bus_client import MessageBusClient
 from ovos_config.locale import setup_locale
-from ovos_utils.log import LOG
+from ovos_utils import wait_for_exit_signal
+from ovos_utils.log import LOG, init_service_logger
+from ovos_utils.process_utils import reset_sigint_handler, PIDLock
 
 from my_assistant.config import init_config_dir
 from my_assistant.skills.skill_manager import MyAssistantSkillManager, on_error, on_stopping, on_ready, on_alive, \
@@ -23,16 +20,17 @@ def main(alive_hook=on_alive, started_hook=on_started, ready_hook=on_ready,
     Returns:
         SkillManager instance or None if it couldn't be initialized
     """
+    # Create PID file, prevent multiple instances of this service
+    PIDLock("SKILLS")
     init_config_dir()
     init_service_logger("skills")
     reset_sigint_handler()
-    # Create PID file, prevent multiple instances of this service
-    mycroft.lock.Lock('skills')
 
     setup_locale()
 
     # Connect this process to the Mycroft message bus
-    bus = start_message_bus_client("SKILLS")
+    bus = MessageBusClient()
+    bus.run_in_thread()
     _register_intent_services(bus)
     event_scheduler = EventScheduler(bus, autostart=False)
     event_scheduler.daemon = True

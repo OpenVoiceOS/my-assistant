@@ -58,11 +58,13 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'my-speech-client=my_assistant.listener.__main__:main',
-            'my-messagebus=my_assistant.bus.__main__:main',
-            'my-skills=my_assistant.skills.__main__:main',
-            'my-audio=my_assistant.audio.__main__:main',
-            'my-gui-service=my_assistant.gui.__main__:main'
+            'my-assistant=my_assistant.__main__:main',
+            # or use old style per-service launchers
+            # 'my-speech-client=my_assistant.listener.__main__:main',
+            # 'my-messagebus=my_assistant.bus.__main__:main',
+            # 'my-skills=my_assistant.skills.__main__:main',
+            # 'my-audio=my_assistant.audio.__main__:main',
+            # 'my-gui-service=my_assistant.gui.__main__:main'
         ]
     }
 )

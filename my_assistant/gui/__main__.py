@@ -1,7 +1,8 @@
 from mycroft.gui.service import GUIService
-from mycroft.util import wait_for_exit_signal, reset_sigint_handler, init_service_logger
-from mycroft.util.log import LOG
 from ovos_config.locale import setup_locale
+from ovos_utils import wait_for_exit_signal
+from ovos_utils.log import LOG, init_service_logger
+from ovos_utils.process_utils import reset_sigint_handler, PIDLock
 
 from my_assistant.config import init_config_dir
 
@@ -19,6 +20,7 @@ def on_error(e='Unknown'):
 
 
 def main(ready_hook=on_ready, error_hook=on_error, stopping_hook=on_stopping):
+    PIDLock("GUI")
     init_config_dir()
     init_service_logger("gui")
     LOG.debug("GUI websocket created")

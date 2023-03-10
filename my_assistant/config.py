@@ -8,7 +8,7 @@ from ovos_utils.log import LOG
 from ovos_utils.xdg_utils import xdg_config_home
 
 ASSISTANT_CORE = "my_assistant"
-CONF_FILE = "assistant.conf"
+CONF_FILE = f"{ASSISTANT_CORE}.conf"
 
 
 def _init_ovos_conf(name: str, force_reload: bool = False):
@@ -40,7 +40,7 @@ def _init_ovos_conf(name: str, force_reload: bool = False):
         ovos_conf['submodule_mappings'][name] = ASSISTANT_CORE
         LOG.warning(f"Calling module ({name}) now configured to use CONF_FILE")
         if name == ASSISTANT_CORE:
-            ovos_conf['submodule_mappings']['my_assistant.skills.skill_manager'] = ASSISTANT_CORE
+            ovos_conf['submodule_mappings'][f'{ASSISTANT_CORE}.skills.skill_manager'] = ASSISTANT_CORE
 
         ovos_path = join(xdg_config_home(), "OpenVoiceOS", "ovos.conf")
         os.makedirs(dirname(ovos_path), exist_ok=True)
